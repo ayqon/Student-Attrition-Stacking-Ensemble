@@ -9,7 +9,7 @@
 | Mohammad Noor Mohammad Irfan | U5741544 | Data Preparation & RFE |
 | Ioannis Konstantinou | U5750302 | Data Preparation & Clustering Models |
 | Ayan Paul | U5732939 | Data Preparation & Classification Models |
-| Vanessa Wiyono | U5729891 | Data Preparation & Clustering Models |
+| Vanessa Rebecca Wiyono | U5729891 | Data Preparation & Clustering Models |
 | Zheyu Wu | U5716921 | Data Preparation & Classification Models |
 
 ## 2. Data Processing
@@ -42,7 +42,7 @@ python final_classification_stacking.py
 ## 4. Clustering Models
 1. Install required libraries (k-means):
 ```bash
-pip install -r requirements.txt
+pip install pandas numpy matplotlib scikit-learn
 ```
 2.  Run the clustering k-means model:
 ```bash
