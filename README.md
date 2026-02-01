@@ -2,15 +2,15 @@
 
 ## 1. Student Introduction
 
-| Name | Student ID |
-|------|------------|
-| Subodh Chandra | U5715404 |
-| Tyrone Fernandes | U5755613 |
-| Mohammad Noor Mohammad Irfan | U5741544 |
-| Ioannis Konstantinou | U5750302 |
-| Ayan Paul | U5732939 |
-| Vanessa Wiyono | U5729891 |
-| Zheyu Wu | U5716921 |
+| Name | Student ID | Role/Contribution |
+|------|------------|-------------------|
+| Subodh Chandra | U5715404 | Data Preparation & PCA |
+| Tyrone Fernandes | U5755613 | Data Preparation |
+| Mohammad Noor Mohammad Irfan | U5741544 | Data Preparation & RFE |
+| Ioannis Konstantinou | U5750302 | Data Preparation & Clustering Models |
+| Ayan Paul | U5732939 | Data Preparation & Classification Models |
+| Vanessa Wiyono | U5729891 | Data Preparation & Clustering Models |
+| Zheyu Wu | U5716921 | Data Preparation & Classification Models |
 
 ## 2. Data Processing
 
