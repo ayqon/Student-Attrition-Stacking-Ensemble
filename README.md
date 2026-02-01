@@ -40,3 +40,11 @@ python final_classification_stacking.py
 ```
 
 ## 4. Clustering Models
+1. Install required libraries (k-means):
+```bash
+pip install -r requirements.txt
+```
+2.  Run the clustering k-means model:
+```bash
+python kmeans-clustering.py
+```
