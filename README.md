@@ -144,8 +144,8 @@ Developed collaboratively by **Group 2** for the **Fundamentals of Artificial In
 
 ```bash
 # Clone the repository
-git clone https://github.com/ayqon/FAIDM-Group-Assessment.git
-cd FAIDM-Group-Assessment
+git clone https://github.com/ayqon/Student-Attrition-Stacking-Ensemble.git
+cd Student-Attrition-Stacking-Ensemble
 
 # Install dependencies
 pip install -r requirements.txt

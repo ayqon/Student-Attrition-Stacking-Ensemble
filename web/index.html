@@ -3,447 +3,378 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OULAD Intelligence: Student Attrition & Behavioral ML Platform</title>
+  <title>OULAD Analytics: Student Trajectory & Attrition Prediction Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="framer-theme">
-  <!-- Subtle Ambient Glow Background -->
-  <div class="ambient-glow glow-top-left"></div>
-  <div class="ambient-glow glow-bottom-right"></div>
-
-  <!-- Global Header -->
-  <header class="framer-header">
-    <div class="header-inner">
-      <div class="brand-block">
-        <div class="brand-gem">
-          <div class="gem-pulse"></div>
-        </div>
-        <div class="brand-meta">
-          <div class="brand-title">OULAD Intelligence</div>
-          <div class="brand-institution">University of Warwick | Group 2 Predictive ML Platform</div>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand-section">
+        <div class="brand-badge">WARWICK</div>
+        <div class="brand-titles">
+          <div class="brand-name">OULAD Learning Analytics Platform</div>
+          <div class="brand-sub">University of Warwick | Student Academic Trajectory & Attrition Prediction Engine</div>
         </div>
       </div>
-      <div class="header-actions">
-        <div class="glass-pill">
-          <span class="live-dot"></span>
-          <span class="pill-text">25,793 Active Cohort Records</span>
+      <div class="header-right">
+        <div class="dataset-pill">
+          <span class="status-dot"></span>
+          <span>25,793 Active Cohort (OULAD)</span>
         </div>
-        <a href="https://github.com/ayqon/FAIDM-Group-Assessment" target="_blank" class="framer-btn framer-btn-glass">GitHub Repository</a>
+        <a href="https://github.com/ayqon/Student-Attrition-Stacking-Ensemble" target="_blank" class="btn btn-outline" style="font-size: 12px; padding: 5px 12px;">GitHub</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero & KPI Bento Grid -->
-  <section class="bento-container">
-    <div class="bento-grid">
-      <!-- Main Bento Hero Card -->
-      <div class="bento-card bento-hero">
-        <div class="hero-tag">Applied Machine Learning</div>
-        <h1 class="hero-headline">Predicting Student Attrition Before Final Exams.</h1>
-        <p class="hero-subtext">Combining unsupervised behavioral phenotyping (K-Means & DBSCAN) with a 9-submodel pairwise Stacking Ensemble for early pastoral intervention.</p>
-      </div>
-
-      <!-- Metric 1: Accuracy -->
-      <div class="bento-card bento-stat">
-        <div class="stat-header">
-          <span class="stat-tag">Stacking Ensemble</span>
-          <span class="stat-indicator ind-violet"></span>
-        </div>
-        <div class="stat-number gradient-violet" id="m-acc">81.09%</div>
-        <div class="stat-sub">Multi-Class Accuracy (Pass / Fail / Withdrawn)</div>
-      </div>
-
-      <!-- Metric 2: At-Risk Split -->
-      <div class="bento-card bento-stat">
-        <div class="stat-header">
-          <span class="stat-tag">Unsupervised K-Means</span>
-          <span class="stat-indicator ind-rose"></span>
-        </div>
-        <div class="stat-split">
-          <div>
-            <div class="split-num text-rose" id="m-risk">40.4%</div>
-            <div class="split-label">At-Risk Fail Rate</div>
-          </div>
-          <div class="split-divider"></div>
-          <div>
-            <div class="split-num text-emerald" id="m-success">7.1%</div>
-            <div class="split-label">Engaged Fail Rate</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Metric 3: PCA Variance -->
-      <div class="bento-card bento-stat">
-        <div class="stat-header">
-          <span class="stat-tag">Dimensionality Reduction</span>
-          <span class="stat-indicator ind-cyan"></span>
-        </div>
-        <div class="stat-number gradient-cyan" id="m-pca">95.0%</div>
-        <div class="stat-sub">Variance Retained across 21 PCs (50% reduction)</div>
-      </div>
+  <!-- Metric Summary Cards -->
+  <div class="metrics-bar">
+    <div class="metric-card">
+      <div class="metric-label">Active Student Cohort</div>
+      <div class="metric-value" id="m-students">25,793</div>
+      <div class="metric-desc">3,361 ghost records filtered</div>
     </div>
-  </section>
-
-  <!-- Framer Segmented Navigation -->
-  <div class="nav-wrapper">
-    <nav class="framer-tabs" id="framer-tabs">
-      <button class="framer-tab-btn active" data-tab="tab-predict">
-        <span class="tab-label">1. Trajectory Simulator</span>
-      </button>
-      <button class="framer-tab-btn" data-tab="tab-kmeans">
-        <span class="tab-label">2. K-Means PCA Phenotyping</span>
-      </button>
-      <button class="framer-tab-btn" data-tab="tab-dbscan">
-        <span class="tab-label">3. DBSCAN Outlier Surveillance</span>
-      </button>
-      <button class="framer-tab-btn" data-tab="tab-stacking">
-        <span class="tab-label">4. Stacking Architecture</span>
-      </button>
-      <div class="tab-slider" id="tab-slider"></div>
-    </nav>
+    <div class="metric-card">
+      <div class="metric-label">Stacking Ensemble Accuracy</div>
+      <div class="metric-value text-accent" id="m-acc">81.09%</div>
+      <div class="metric-desc">9-submodel pairwise meta-learner</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">PCA Variance Retained</div>
+      <div class="metric-value" id="m-pca">95.0%</div>
+      <div class="metric-desc">21 principal components (50% reduction)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">At-Risk Cluster Fail Rate</div>
+      <div class="metric-value text-danger" id="m-risk">40.4%</div>
+      <div class="metric-desc">K-Means Group 0 (Low Engagement)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Engaged Cluster Fail Rate</div>
+      <div class="metric-value text-success" id="m-success">7.1%</div>
+      <div class="metric-desc">K-Means Group 1 (High Engagement)</div>
+    </div>
   </div>
 
-  <!-- Main Viewports -->
-  <main class="content-container">
+  <!-- Navigation Tabs -->
+  <nav class="tab-navigation">
+    <button class="tab-btn active" data-tab="tab-predict">1. Student Trajectory Predictor</button>
+    <button class="tab-btn" data-tab="tab-kmeans">2. Behavioral Phenotyping (K-Means & PCA)</button>
+    <button class="tab-btn" data-tab="tab-dbscan">3. DBSCAN Outlier Surveillance</button>
+    <button class="tab-btn" data-tab="tab-stacking">4. Stacking Ensemble & Benchmarks</button>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-container">
     
-    <!-- TAB 1: Real-Time Trajectory Simulator -->
-    <section id="tab-predict" class="framer-pane active">
-      <div class="pane-headline-row">
+    <!-- TAB 1: Student Trajectory Predictor -->
+    <section id="tab-predict" class="tab-pane active">
+      <div class="pane-header">
         <div>
-          <h2>Interactive Student Trajectory Simulator</h2>
-          <p class="pane-desc">Adjust behavioral clickstream and engagement signals to calculate live calibrated outcome probabilities.</p>
+          <h2>Early-Semester Student Attrition & Trajectory Predictor</h2>
+          <p class="pane-subtitle">Proactive risk scoring strictly from early demographic and VLE engagement clickstreams (exam scores excluded to prevent data leakage).</p>
         </div>
-        <div class="pane-action-group">
-          <button id="btn-reset-sim" class="framer-btn framer-btn-glass">Reset to Median</button>
-        </div>
+        <button id="btn-reset-simulator" class="btn btn-outline">Reset to Median Student</button>
       </div>
 
-      <div class="simulator-layout">
-        <!-- Sliders Glass Panel -->
-        <div class="glass-panel input-panel">
-          <div class="panel-title-bar">
-            <h3>Student Behavioral Attributes</h3>
-            <div class="profile-quick-select">
-              <span class="quick-lbl">Presets:</span>
-              <button class="chip-btn" data-profile="high-risk">At-Risk Learner</button>
-              <button class="chip-btn" data-profile="average">Average Active</button>
-              <button class="chip-btn" data-profile="high-achiever">High Engaged</button>
-            </div>
-          </div>
-
-          <div class="framer-slider-grid">
-            <div class="slider-card">
-              <div class="slider-meta">
-                <span class="field-name">Active Weeks</span>
-                <span class="field-val" id="val-active-weeks">18</span>
+      <div class="sim-grid">
+        <!-- Sliders Column -->
+        <div class="sim-col">
+          <div class="panel-box">
+            <h3>Student Engagement & Academic Attributes</h3>
+            
+            <div class="input-group-grid">
+              <div class="slider-box">
+                <div class="slider-header">
+                  <label for="s-active-weeks">Active Engagement Weeks:</label>
+                  <span class="badge-val" id="val-active-weeks">18</span>
+                </div>
+                <input type="range" id="s-active-weeks" min="1" max="39" step="1" value="18" class="slider">
               </div>
-              <input type="range" id="s-active-weeks" min="1" max="39" step="1" value="18" class="neon-range">
+
+              <div class="slider-box">
+                <div class="slider-header">
+                  <label for="s-core-comp">Core Completion Ratio:</label>
+                  <span class="badge-val" id="val-core-comp">0.65</span>
+                </div>
+                <input type="range" id="s-core-comp" min="0.0" max="1.0" step="0.05" value="0.65" class="slider">
+              </div>
+
+              <div class="slider-box">
+                <div class="slider-header">
+                  <label for="s-attempt-score">Attempted Core Score:</label>
+                  <span class="badge-val" id="val-attempt-score">65</span>
+                </div>
+                <input type="range" id="s-attempt-score" min="0" max="100" step="1" value="65" class="slider">
+              </div>
+
+              <div class="slider-box">
+                <div class="slider-header">
+                  <label for="s-perf-eff">Performance Efficiency:</label>
+                  <span class="badge-val" id="val-perf-eff">0.75</span>
+                </div>
+                <input type="range" id="s-perf-eff" min="0.0" max="2.0" step="0.05" value="0.75" class="slider">
+              </div>
+
+              <div class="slider-box">
+                <div class="slider-header">
+                  <label for="s-active-days">VLE Active Days:</label>
+                  <span class="badge-val" id="val-active-days">42</span>
+                </div>
+                <input type="range" id="s-active-days" min="1" max="150" step="1" value="42" class="slider">
+              </div>
+
+              <div class="slider-box">
+                <div class="slider-header">
+                  <label for="s-prev-attempts">Previous Course Attempts:</label>
+                  <span class="badge-val" id="val-prev-attempts">0</span>
+                </div>
+                <input type="range" id="s-prev-attempts" min="0" max="5" step="1" value="0" class="slider">
+              </div>
+
+              <div class="slider-box">
+                <div class="slider-header">
+                  <label for="s-studied-credits">Studied Credits:</label>
+                  <span class="badge-val" id="val-studied-credits">60</span>
+                </div>
+                <input type="range" id="s-studied-credits" min="30" max="240" step="30" value="60" class="slider">
+              </div>
+
+              <div class="slider-box">
+                <div class="slider-header">
+                  <label for="s-imd-band">Deprivation Index (IMD Band):</label>
+                  <span class="badge-val" id="val-imd-band">5 (Mid)</span>
+                </div>
+                <input type="range" id="s-imd-band" min="1" max="10" step="1" value="5" class="slider">
+              </div>
             </div>
 
-            <div class="slider-card">
-              <div class="slider-meta">
-                <span class="field-name">Core Completion Ratio</span>
-                <span class="field-val" id="val-core-comp">0.65</span>
-              </div>
-              <input type="range" id="s-core-comp" min="0.0" max="1.0" step="0.05" value="0.65" class="neon-range">
-            </div>
-
-            <div class="slider-card">
-              <div class="slider-meta">
-                <span class="field-name">Attempted Core Score</span>
-                <span class="field-val" id="val-attempt-score">65</span>
-              </div>
-              <input type="range" id="s-attempt-score" min="0" max="100" step="1" value="65" class="neon-range">
-            </div>
-
-            <div class="slider-card">
-              <div class="slider-meta">
-                <span class="field-name">Performance Efficiency</span>
-                <span class="field-val" id="val-perf-eff">0.75</span>
-              </div>
-              <input type="range" id="s-perf-eff" min="0.0" max="2.0" step="0.05" value="0.75" class="neon-range">
-            </div>
-
-            <div class="slider-card">
-              <div class="slider-meta">
-                <span class="field-name">VLE Active Days</span>
-                <span class="field-val" id="val-active-days">42</span>
-              </div>
-              <input type="range" id="s-active-days" min="1" max="150" step="1" value="42" class="neon-range">
-            </div>
-
-            <div class="slider-card">
-              <div class="slider-meta">
-                <span class="field-name">Previous Attempts</span>
-                <span class="field-val" id="val-prev-attempts">0</span>
-              </div>
-              <input type="range" id="s-prev-attempts" min="0" max="5" step="1" value="0" class="neon-range">
-            </div>
-
-            <div class="slider-card">
-              <div class="slider-meta">
-                <span class="field-name">Studied Credits</span>
-                <span class="field-val" id="val-studied-credits">60</span>
-              </div>
-              <input type="range" id="s-studied-credits" min="30" max="240" step="30" value="60" class="neon-range">
-            </div>
-
-            <div class="slider-card">
-              <div class="slider-meta">
-                <span class="field-name">Deprivation Index (IMD)</span>
-                <span class="field-val" id="val-imd-band">5 (Mid)</span>
-              </div>
-              <input type="range" id="s-imd-band" min="1" max="10" step="1" value="5" class="neon-range">
+            <div class="quick-presets-row">
+              <span class="stat-lbl" style="font-weight: 600;">Load Student Profiles:</span>
+              <button class="btn btn-outline btn-sm" data-profile="high-risk">At-Risk Disengaged Learner</button>
+              <button class="btn btn-outline btn-sm" data-profile="average">Average Active Student</button>
+              <button class="btn btn-outline btn-sm" data-profile="high-achiever">High-Engagement Achiever</button>
             </div>
           </div>
         </div>
 
-        <!-- Output Prediction Glass Panel -->
-        <div class="output-col">
-          <div class="glass-panel output-panel">
-            <h3>Stacking Ensemble Multi-Class Output</h3>
-            
-            <div class="prob-bars-stack">
-              <div class="prob-unit">
-                <div class="prob-top">
-                  <span class="prob-title">Pass Trajectory</span>
-                  <span class="prob-num text-emerald" id="prob-pass">68.4%</span>
+        <!-- Output Score Column -->
+        <div class="sim-col">
+          <div class="panel-box highlight-panel">
+            <h3>Stacking Ensemble Multi-Class Probability</h3>
+            <div class="prob-container">
+              <div class="prob-row">
+                <div class="prob-header">
+                  <span>Pass Probability</span>
+                  <strong id="prob-pass" class="text-success">68.4%</strong>
                 </div>
-                <div class="framer-track">
-                  <div id="bar-pass" class="framer-fill fill-emerald" style="width: 68.4%;"></div>
-                </div>
-              </div>
-
-              <div class="prob-unit">
-                <div class="prob-top">
-                  <span class="prob-title">Fail Hazard</span>
-                  <span class="prob-num text-rose" id="prob-fail">18.2%</span>
-                </div>
-                <div class="framer-track">
-                  <div id="bar-fail" class="framer-fill fill-rose" style="width: 18.2%;"></div>
+                <div class="prob-bar-track">
+                  <div id="bar-pass" class="prob-bar-fill fill-pass" style="width: 68.4%;"></div>
                 </div>
               </div>
 
-              <div class="prob-unit">
-                <div class="prob-top">
-                  <span class="prob-title">Withdrawn (Attrition) Risk</span>
-                  <span class="prob-num text-indigo" id="prob-withdrawn">13.4%</span>
+              <div class="prob-row">
+                <div class="prob-header">
+                  <span>Fail Probability</span>
+                  <strong id="prob-fail" class="text-danger">18.2%</strong>
                 </div>
-                <div class="framer-track">
-                  <div id="bar-withdrawn" class="framer-fill fill-indigo" style="width: 13.4%;"></div>
+                <div class="prob-bar-track">
+                  <div id="bar-fail" class="prob-bar-fill fill-fail" style="width: 18.2%;"></div>
+                </div>
+              </div>
+
+              <div class="prob-row">
+                <div class="prob-header">
+                  <span>Withdrawn (Attrition) Probability</span>
+                  <strong id="prob-withdrawn" class="text-slate">13.4%</strong>
+                </div>
+                <div class="prob-bar-track">
+                  <div id="bar-withdrawn" class="prob-bar-fill fill-withdrawn" style="width: 13.4%;"></div>
                 </div>
               </div>
             </div>
 
-            <div class="verdict-banner" id="verdict-banner">
-              <div class="verdict-tag" id="verdict-tag">PREDICTED OUTCOME</div>
-              <div class="verdict-main" id="pred-outcome">PASS</div>
-              <div class="verdict-detail" id="pred-desc">High assessment completion and continuous active engagement indicate a stable trajectory toward module completion.</div>
+            <div class="risk-verdict-card" id="risk-verdict-card">
+              <div class="verdict-title">Predicted Trajectory: <strong id="pred-outcome">PASS</strong></div>
+              <div class="verdict-desc" id="pred-desc">Student engagement and core score completion indicate high probability of successful module completion.</div>
             </div>
           </div>
 
-          <div class="glass-panel advisory-panel">
-            <div class="advisory-header">
-              <span class="advisor-indicator"></span>
-              <h4 id="advisory-title">Standard Progress Monitoring</h4>
+          <div class="panel-box">
+            <h3>Tutor Action & Intervention Advisory</h3>
+            <div class="advisory-box" id="advisory-box">
+              <div class="advisory-icon-text">
+                <span class="status-dot"></span>
+                <strong id="advisory-title">Standard Progress Monitoring</strong>
+              </div>
+              <p id="advisory-text" class="advisory-p">No critical warning flags detected. Maintain regular automated VLE check-ins and standard submission reminders.</p>
             </div>
-            <p id="advisory-text">Engagement patterns are within normal academic bounds. Maintain standard weekly VLE notifications.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 2: K-Means & PCA Phenotypes -->
-    <section id="tab-kmeans" class="framer-pane">
-      <div class="pane-headline-row">
+    <!-- TAB 2: K-Means Clustering & PCA Phenotypes -->
+    <section id="tab-kmeans" class="tab-pane">
+      <div class="pane-header">
         <div>
           <h2>Unsupervised Behavioral Phenotyping (K-Means & PCA)</h2>
-          <p class="pane-desc">Projecting 25,793 students onto 20 Principal Components (95% variance) to isolate at-risk behavioral clusters.</p>
+          <p class="pane-subtitle">Clustering 25,793 active students across 20 Principal Components (95% variance) into distinct engagement phenotypes.</p>
         </div>
-        <div class="pane-action-group">
-          <button id="btn-toggle-clusters" class="framer-btn framer-btn-active">Color by Cluster</button>
-          <button id="btn-toggle-outcomes" class="framer-btn framer-btn-glass">Color by True Outcome</button>
+        <div class="graph-controls-inline">
+          <button id="btn-toggle-clusters" class="btn btn-outline active">Color by Cluster</button>
+          <button id="btn-toggle-outcomes" class="btn btn-outline">Color by Final Outcome</button>
         </div>
       </div>
 
-      <div class="kmeans-layout">
-        <div class="glass-panel canvas-panel">
-          <div class="canvas-header-bar">
-            <h3>2D PCA Projection Space & Centroids</h3>
-            <div class="canvas-legend" id="scatter-legend">
-              <div class="legend-badge"><span class="badge-dot dot-rose"></span> Group 0: At-Risk (40.4% Fail Rate)</div>
-              <div class="legend-badge"><span class="badge-dot dot-emerald"></span> Group 1: Engaged (7.1% Fail Rate)</div>
+      <div class="kmeans-grid">
+        <div class="chart-panel">
+          <div class="panel-box">
+            <h3>2D PCA Behavioral Projection & Cluster Centroids</h3>
+            <div class="canvas-scatter-wrapper">
+              <canvas id="pca-scatter-canvas"></canvas>
             </div>
-          </div>
-          <div class="canvas-container">
-            <canvas id="pca-scatter-canvas"></canvas>
+            <div class="scatter-legend" id="scatter-legend">
+              <div class="legend-item"><span class="legend-dot" style="background:#dc2626;"></span><span>Group 0: At-Risk / Low Engagement (Fail Rate: 40.4%)</span></div>
+              <div class="legend-item"><span class="legend-dot" style="background:#059669;"></span><span>Group 1: Successful / High Engagement (Fail Rate: 7.1%)</span></div>
+            </div>
           </div>
         </div>
 
-        <div class="kmeans-stats-sidebar">
-          <div class="glass-panel">
-            <h3>Cluster Risk Separation</h3>
-            <div class="glow-stat-row">
-              <span class="glow-lbl">Group 0 Cohort</span>
-              <span class="glow-val">17,252 (66.9%)</span>
-            </div>
-            <div class="glow-stat-row">
-              <span class="glow-lbl">Group 0 Fail Rate</span>
-              <span class="glow-val text-rose">40.4%</span>
-            </div>
-            <div class="glow-stat-row">
-              <span class="glow-lbl">Group 1 Cohort</span>
-              <span class="glow-val">8,531 (33.1%)</span>
-            </div>
-            <div class="glow-stat-row">
-              <span class="glow-lbl">Group 1 Fail Rate</span>
-              <span class="glow-val text-emerald">7.1% (Lower Risk)</span>
+        <div class="kmeans-sidebar">
+          <div class="panel-box">
+            <h3>Cluster Risk & Attrition Breakdown</h3>
+            <div class="cluster-summary-card">
+              <div class="stat-row"><span class="stat-lbl">Group 0 Size</span><span class="stat-val">17,252 (66.9%)</span></div>
+              <div class="stat-row"><span class="stat-lbl">Group 0 Fail Rate</span><span class="stat-val text-danger">40.4%</span></div>
+              <div class="stat-row"><span class="stat-lbl">Group 1 Size</span><span class="stat-val">8,531 (33.1%)</span></div>
+              <div class="stat-row"><span class="stat-lbl">Group 1 Fail Rate</span><span class="stat-val text-success">7.1%</span></div>
+              <div class="stat-row"><span class="stat-lbl">Optimal K Criteria</span><span class="stat-val">Silhouette & Elbow</span></div>
             </div>
           </div>
 
-          <div class="glass-panel">
-            <h3>Domain Academic Risk Formula</h3>
-            <p class="panel-small-text">Excludes early withdrawals to compute true academic failure probability:</p>
-            <div class="code-pill">
+          <div class="panel-box">
+            <h3>Academic Risk Formulation</h3>
+            <p class="box-desc">Domain risk rate excludes early dropouts to measure true assessment failure risk:</p>
+            <div class="formula-box">
               Risk Rate = Fail / (Total - Withdrawn)
             </div>
           </div>
 
-          <div class="glass-panel">
-            <h3>PCA Variance Retention</h3>
-            <div class="glow-stat-row">
-              <span class="glow-lbl">Original Dimension</span>
-              <span class="glow-val">45 Features</span>
-            </div>
-            <div class="glow-stat-row">
-              <span class="glow-lbl">Retained PCs</span>
-              <span class="glow-val">21 Components</span>
-            </div>
-            <div class="glow-stat-row">
-              <span class="glow-lbl">Cumulative Variance</span>
-              <span class="glow-val text-cyan">95.0%</span>
-            </div>
+          <div class="panel-box">
+            <h3>Principal Component Retention</h3>
+            <div class="stat-row"><span class="stat-lbl">Input Features</span><span class="stat-val">45</span></div>
+            <div class="stat-row"><span class="stat-lbl">Retained PCs</span><span class="stat-val">21 (50% reduction)</span></div>
+            <div class="stat-row"><span class="stat-lbl">Cumulative Variance</span><span class="stat-val text-accent">95.0%</span></div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- TAB 3: DBSCAN Outlier Surveillance -->
-    <section id="tab-dbscan" class="framer-pane">
-      <div class="pane-headline-row">
+    <section id="tab-dbscan" class="tab-pane">
+      <div class="pane-header">
         <div>
           <h2>DBSCAN Density-Based Outlier Surveillance</h2>
-          <p class="pane-desc">Automated detection of irregular engagement patterns and extreme behavioral collapse without pre-set cluster counts.</p>
+          <p class="pane-subtitle">Automatic detection of irregular engagement patterns and extreme behavioral collapse without requiring pre-defined cluster counts.</p>
         </div>
       </div>
 
-      <div class="dbscan-layout">
-        <div class="glass-panel">
-          <h3>DBSCAN Hyperparameters & Cohort Counts</h3>
-          <div class="glow-stat-row">
-            <span class="glow-lbl">Epsilon Distance (&epsilon;)</span>
-            <span class="glow-val">0.2 (K-Distance Elbow)</span>
-          </div>
-          <div class="glow-stat-row">
-            <span class="glow-lbl">MinPts Threshold</span>
-            <span class="glow-val">10 points</span>
-          </div>
-          <div class="glow-stat-row">
-            <span class="glow-lbl">Core Dense Cohort</span>
-            <span class="glow-val text-emerald">22,705 (88.06%)</span>
-          </div>
-          <div class="glow-stat-row">
-            <span class="glow-lbl">Noise Outliers Isolated</span>
-            <span class="glow-val text-rose">3,078 students (11.94%)</span>
-          </div>
-          <div class="glow-stat-row">
-            <span class="glow-lbl">Noise Cohort Fail Rate</span>
-            <span class="glow-val text-rose">68.4% (Critical Hazard)</span>
-          </div>
+      <div class="dbscan-grid">
+        <div class="panel-box">
+          <h3>DBSCAN Density Clustering Parameters</h3>
+          <div class="stat-row"><span class="stat-lbl">Epsilon Distance</span><span class="stat-val">0.2 (K-Distance Elbow)</span></div>
+          <div class="stat-row"><span class="stat-lbl">MinPts Threshold</span><span class="stat-val">10 points</span></div>
+          <div class="stat-row"><span class="stat-lbl">Dense Core Cohort</span><span class="stat-val">22,705 students (88.06%)</span></div>
+          <div class="stat-row"><span class="stat-lbl">Isolated Noise Outliers</span><span class="stat-val text-danger">3,078 students (11.94%)</span></div>
+          <div class="stat-row"><span class="stat-lbl">Noise Outlier Fail Rate</span><span class="stat-val text-danger">68.4%</span></div>
         </div>
 
-        <div class="glass-panel">
-          <h3>Cohort Failure Hazard Comparison</h3>
-          <div class="chart-wrapper">
+        <div class="panel-box">
+          <h3>Cohort Behavioral Comparison</h3>
+          <div class="chart-box" style="height: 220px;">
             <canvas id="dbscan-bar-chart"></canvas>
           </div>
         </div>
       </div>
+
+      <div class="panel-box mt-4">
+        <h3>Intervention Protocol for DBSCAN Noise Outliers</h3>
+        <p class="box-desc">Students flagged as density outliers exhibit severe VLE disengagement (near-zero active days despite remaining registered). Automated early alerts trigger proactive faculty counseling prior to Week 6 submission deadlines.</p>
+      </div>
     </section>
 
-    <!-- TAB 4: Stacking Architecture & Benchmarks -->
-    <section id="tab-stacking" class="framer-pane">
-      <div class="pane-headline-row">
+    <!-- TAB 4: Stacking Ensemble & Benchmarks -->
+    <section id="tab-stacking" class="tab-pane">
+      <div class="pane-header">
         <div>
-          <h2>Heterogeneous Stacking Ensemble & Benchmarks</h2>
-          <p class="pane-desc">Pairwise problem decomposition (9 sub-models) combined via an XGBoost Meta-Learner.</p>
+          <h2>Heterogeneous Stacking Ensemble & Benchmark Metrics</h2>
+          <p class="pane-subtitle">Comparative evaluation of 9-submodel pairwise decomposition vs standalone baseline learners.</p>
         </div>
       </div>
 
-      <div class="stacking-layout">
-        <div class="glass-panel">
+      <div class="dsa-cards-grid">
+        <div class="panel-box">
           <h3>Model Accuracy Comparison</h3>
-          <div class="chart-wrapper">
+          <div class="chart-box" style="height: 220px;">
             <canvas id="stacking-chart"></canvas>
           </div>
+          <div class="stat-row"><span class="stat-lbl">Stacking Ensemble (XGB Meta)</span><span class="stat-val text-accent">81.09%</span></div>
+          <div class="stat-row"><span class="stat-lbl">Standalone XGBoost</span><span class="stat-val">79.23%</span></div>
+          <div class="stat-row"><span class="stat-lbl">Standalone Random Forest</span><span class="stat-val">78.45%</span></div>
+          <div class="stat-row"><span class="stat-lbl">Standalone SVM (RBF)</span><span class="stat-val">77.80%</span></div>
+          <div class="stat-row"><span class="stat-lbl">K-Nearest Neighbors (Dropped)</span><span class="stat-val">71.20%</span></div>
         </div>
 
-        <div class="glass-panel">
-          <h3>Multi-Class Stacking Confusion Matrix</h3>
-          <table class="framer-table">
+        <div class="panel-box">
+          <h3>Stacking Ensemble Multi-Class Confusion Matrix</h3>
+          <table class="data-table">
             <thead>
               <tr>
                 <th>True Class \ Pred</th>
-                <th>Pred Pass</th>
-                <th>Pred Fail</th>
-                <th>Pred Withdrawn</th>
+                <th class="text-center">Pred Pass</th>
+                <th class="text-center">Pred Fail</th>
+                <th class="text-center">Pred Withdrawn</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><strong>True Pass</strong></td>
-                <td class="cell-highlight text-emerald">13,224</td>
-                <td>1,145</td>
-                <td>1,008</td>
+                <td class="text-center" style="background:#ecfdf5; font-weight:700; color:#059669;">13,224</td>
+                <td class="text-center">1,145</td>
+                <td class="text-center">1,008</td>
               </tr>
               <tr>
                 <td><strong>True Fail</strong></td>
-                <td>746</td>
-                <td class="cell-highlight text-rose">4,218</td>
-                <td>775</td>
+                <td class="text-center">746</td>
+                <td class="text-center" style="background:#fef2f2; font-weight:700; color:#dc2626;">4,218</td>
+                <td class="text-center">775</td>
               </tr>
               <tr>
                 <td><strong>True Withdrawn</strong></td>
-                <td>582</td>
-                <td>614</td>
-                <td class="cell-highlight text-indigo">3,471</td>
+                <td class="text-center">582</td>
+                <td class="text-center">614</td>
+                <td class="text-center" style="background:#f1f5f9; font-weight:700; color:#475569;">3,471</td>
               </tr>
             </tbody>
           </table>
-          <div class="matrix-pills">
-            <span class="matrix-pill">Pass Precision: <strong>84.0%</strong></span>
-            <span class="matrix-pill">Fail Precision: <strong>78.0%</strong></span>
-            <span class="matrix-pill">Withdrawn Precision: <strong>81.0%</strong></span>
-          </div>
+          <div class="stat-row mt-4"><span class="stat-lbl">Pass Precision</span><span class="stat-val">84.0%</span></div>
+          <div class="stat-row"><span class="stat-lbl">Fail Precision</span><span class="stat-val">78.0%</span></div>
+          <div class="stat-row"><span class="stat-lbl">Withdrawn Precision</span><span class="stat-val">81.0%</span></div>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- Framer Footer -->
-  <footer class="framer-footer">
-    <div class="footer-inner">
-      <div class="footer-left">
-        <span>University of Warwick | Fundamentals of Artificial Intelligence & Data Mining (WM9QG-15)</span>
-      </div>
-      <div class="footer-right">
-        <a href="https://github.com/ayqon/FAIDM-Group-Assessment" target="_blank" class="footer-link">GitHub Repository</a>
-      </div>
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div>University of Warwick - Fundamentals of Artificial Intelligence & Data Mining (WM9QG-15)</div>
+      <div><a href="https://github.com/ayqon/Student-Attrition-Stacking-Ensemble" target="_blank" class="footer-link">GitHub Repository</a></div>
     </div>
   </footer>
 
