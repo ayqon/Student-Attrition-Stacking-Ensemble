@@ -594,3 +594,10 @@ body {
   .metrics-bar { grid-template-columns: repeat(2, 1fr); }
   .sim-grid, .kmeans-grid, .dbscan-grid, .dsa-cards-grid { grid-template-columns: 1fr; }
 }
+
+.chart-box {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  min-height: 480px;
+}

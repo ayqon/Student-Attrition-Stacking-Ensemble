@@ -1,7 +1,9 @@
 // OULAD Analytics Platform - Interactive Logic
 document.addEventListener('DOMContentLoaded', async () => {
   let appData = null;
-  let colorMode = 'cluster'; // 'cluster' or 'outcome'
+  let pcaScatterChart = null;
+  let dbscanChart = null;
+  let stackingChart = null;
 
   // 1. Fetch Real Data
   try {
@@ -13,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // 2. Initialize Tab Switching
+  // 2. Tab Switching with layout reflow detection
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -21,9 +23,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       btn.classList.add('active');
       const targetPane = document.getElementById(btn.dataset.tab);
       if (targetPane) targetPane.classList.add('active');
-      if (btn.dataset.tab === 'tab-kmeans') {
-        renderScatter();
-      }
+
+      setTimeout(() => {
+        if (btn.dataset.tab === 'tab-kmeans') {
+          if (!pcaScatterChart) {
+            initPcaScatter();
+          } else {
+            pcaScatterChart.resize();
+            pcaScatterChart.update();
+          }
+        } else if (btn.dataset.tab === 'tab-dbscan' && dbscanChart) {
+          dbscanChart.resize();
+          dbscanChart.update();
+        } else if (btn.dataset.tab === 'tab-stacking' && stackingChart) {
+          stackingChart.resize();
+          stackingChart.update();
+        }
+      }, 50);
     });
   });
 
@@ -34,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('m-risk').textContent = appData.summary.at_risk_fail_rate.toFixed(1) + '%';
   document.getElementById('m-success').textContent = appData.summary.engaged_fail_rate.toFixed(1) + '%';
 
-  // 4. TAB 1: Real-Time Trajectory Simulator
+  // 4. TAB 1: Simulator
   const sActiveWeeks = document.getElementById('s-active-weeks');
   const sCoreComp = document.getElementById('s-core-comp');
   const sAttemptScore = document.getElementById('s-attempt-score');
@@ -63,12 +79,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('val-studied-credits').textContent = studiedCredits;
     document.getElementById('val-imd-band').textContent = imdBand + (imdBand <= 3 ? ' (Deprived)' : (imdBand >= 8 ? ' (Affluent)' : ' (Mid)'));
 
-    // Scoring heuristics calibrated to Stacking Ensemble multi-class probabilities
     let zPass = (coreComp * 3.5) + (attemptScore * 0.04) + (activeWeeks * 0.08) + (perfEff * 1.5) - (prevAttempts * 0.8) - 2.8;
     let zFail = -(coreComp * 2.8) - (attemptScore * 0.03) + (prevAttempts * 1.2) - (perfEff * 0.8) + 1.2;
     let zWithdrawn = -(activeWeeks * 0.12) - (activeDays * 0.03) + (studiedCredits * 0.005) + (10 - imdBand) * 0.1;
 
-    // Softmax probabilities
     const expPass = Math.exp(zPass);
     const expFail = Math.exp(zFail);
     const expWith = Math.exp(zWithdrawn);
@@ -165,115 +179,120 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   updateSimulator();
 
-  // 5. TAB 2: PCA Scatter Canvas
-  const canvas = document.getElementById('pca-scatter-canvas');
-  const ctx = canvas.getContext('2d');
-
-  function resizeCanvas() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width = rect.width * window.devicePixelRatio;
-    canvas.height = rect.height * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    renderScatter();
-  }
-  window.addEventListener('resize', resizeCanvas);
-
-  function renderScatter() {
-    if (!appData) return;
-    const w = canvas.parentElement.clientWidth;
-    const h = canvas.parentElement.clientHeight;
-
-    ctx.clearRect(0, 0, w, h);
-
+  // 5. TAB 2: Robust Chart.js 2D PCA Scatter Chart
+  function initPcaScatter() {
+    const ctxScatter = document.getElementById('pca-scatter-chart').getContext('2d');
     const pts = appData.scatter_points;
-    const minX = -6, maxX = 8;
-    const minY = -5, maxY = 6;
 
-    function mapX(val) { return ((val - minX) / (maxX - minX)) * (w - 60) + 30; }
-    function mapY(val) { return h - (((val - minY) / (maxY - minY)) * (h - 60) + 30); }
+    const group0Pts = pts.filter(p => p.cluster === 0).map(p => ({ x: p.pc1, y: p.pc2, result: p.result }));
+    const group1Pts = pts.filter(p => p.cluster === 1).map(p => ({ x: p.pc1, y: p.pc2, result: p.result }));
 
-    // Grid lines
-    ctx.strokeStyle = '#f1f5f9';
-    ctx.lineWidth = 1;
-    for (let x = -4; x <= 6; x += 2) {
-      ctx.beginPath();
-      ctx.moveTo(mapX(x), 0);
-      ctx.lineTo(mapX(x), h);
-      ctx.stroke();
-    }
-    for (let y = -4; y <= 4; y += 2) {
-      ctx.beginPath();
-      ctx.moveTo(0, mapY(y));
-      ctx.lineTo(w, mapY(y));
-      ctx.stroke();
-    }
+    const centroid0 = { x: appData.centroids[0].pc1, y: appData.centroids[0].pc2 };
+    const centroid1 = { x: appData.centroids[1].pc1, y: appData.centroids[1].pc2 };
 
-    // Points
-    for (const p of pts) {
-      const cx = mapX(p.pc1);
-      const cy = mapY(p.pc2);
-
-      ctx.beginPath();
-      ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-
-      if (colorMode === 'cluster') {
-        ctx.fillStyle = p.cluster === 0 ? 'rgba(220, 38, 38, 0.45)' : 'rgba(5, 150, 105, 0.45)';
-      } else {
-        if (p.result === 'Pass') ctx.fillStyle = 'rgba(5, 150, 105, 0.5)';
-        else if (p.result === 'Fail') ctx.fillStyle = 'rgba(220, 38, 38, 0.5)';
-        else ctx.fillStyle = 'rgba(100, 116, 139, 0.5)';
+    pcaScatterChart = new Chart(ctxScatter, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: 'Group 0: At-Risk (40.4% Fail)',
+            data: group0Pts,
+            backgroundColor: 'rgba(220, 38, 38, 0.45)',
+            borderColor: 'rgba(220, 38, 38, 0.7)',
+            pointRadius: 3,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Group 1: Engaged (7.1% Fail)',
+            data: group1Pts,
+            backgroundColor: 'rgba(5, 150, 105, 0.45)',
+            borderColor: 'rgba(5, 150, 105, 0.7)',
+            pointRadius: 3,
+            pointHoverRadius: 6
+          },
+          {
+            label: 'Centroid 0 (At-Risk)',
+            data: [centroid0],
+            backgroundColor: '#dc2626',
+            borderColor: '#ffffff',
+            borderWidth: 2,
+            pointRadius: 9,
+            pointStyle: 'rectRot'
+          },
+          {
+            label: 'Centroid 1 (Engaged)',
+            data: [centroid1],
+            backgroundColor: '#059669',
+            borderColor: '#ffffff',
+            borderWidth: 2,
+            pointRadius: 9,
+            pointStyle: 'rectRot'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11, family: 'Inter' } } },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: (PC1: ${ctx.raw.x.toFixed(2)}, PC2: ${ctx.raw.y.toFixed(2)})`
+            }
+          }
+        },
+        scales: {
+          x: { title: { display: true, text: 'Principal Component 1 (Engagement Dimension)' }, grid: { color: '#f1f5f9' } },
+          y: { title: { display: true, text: 'Principal Component 2 (Assessment Dimension)' }, grid: { color: '#f1f5f9' } }
+        }
       }
-      ctx.fill();
-    }
+    });
 
-    // Centroids
-    for (const c of appData.centroids) {
-      const cx = mapX(c.pc1);
-      const cy = mapY(c.pc2);
+    // Toggle outcomes vs clusters
+    document.getElementById('btn-toggle-clusters').addEventListener('click', (e) => {
+      e.target.classList.add('active');
+      document.getElementById('btn-toggle-outcomes').classList.remove('active');
 
-      ctx.beginPath();
-      ctx.arc(cx, cy, 8, 0, Math.PI * 2);
-      ctx.fillStyle = c.cluster === 0 ? '#dc2626' : '#059669';
-      ctx.fill();
-      ctx.lineWidth = 2.5;
-      ctx.strokeStyle = '#ffffff';
-      ctx.stroke();
+      pcaScatterChart.data.datasets[0].label = 'Group 0: At-Risk (40.4% Fail)';
+      pcaScatterChart.data.datasets[0].data = group0Pts;
+      pcaScatterChart.data.datasets[0].backgroundColor = 'rgba(220, 38, 38, 0.45)';
 
-      ctx.font = 'bold 11px Inter, sans-serif';
-      ctx.fillStyle = '#0f172a';
-      ctx.textAlign = 'center';
-      ctx.fillText(`Centroid ${c.cluster} (${c.label.split(' ')[0]})`, cx, cy - 14);
-    }
+      pcaScatterChart.data.datasets[1].label = 'Group 1: Engaged (7.1% Fail)';
+      pcaScatterChart.data.datasets[1].data = group1Pts;
+      pcaScatterChart.data.datasets[1].backgroundColor = 'rgba(5, 150, 105, 0.45)';
+
+      pcaScatterChart.data.datasets[2].hidden = false;
+      pcaScatterChart.data.datasets[3].hidden = false;
+      pcaScatterChart.update();
+    });
+
+    document.getElementById('btn-toggle-outcomes').addEventListener('click', (e) => {
+      e.target.classList.add('active');
+      document.getElementById('btn-toggle-clusters').classList.remove('active');
+
+      const passPts = pts.filter(p => p.result === 'Pass').map(p => ({ x: p.pc1, y: p.pc2 }));
+      const failPts = pts.filter(p => p.result === 'Fail').map(p => ({ x: p.pc1, y: p.pc2 }));
+      const withPts = pts.filter(p => p.result === 'Withdrawn').map(p => ({ x: p.pc1, y: p.pc2 }));
+
+      pcaScatterChart.data.datasets[0].label = 'True Pass (59.6%)';
+      pcaScatterChart.data.datasets[0].data = passPts;
+      pcaScatterChart.data.datasets[0].backgroundColor = 'rgba(5, 150, 105, 0.5)';
+
+      pcaScatterChart.data.datasets[1].label = 'True Fail (22.3%)';
+      pcaScatterChart.data.datasets[1].data = failPts;
+      pcaScatterChart.data.datasets[1].backgroundColor = 'rgba(220, 38, 38, 0.5)';
+
+      pcaScatterChart.data.datasets[2].hidden = true;
+      pcaScatterChart.data.datasets[3].hidden = true;
+      pcaScatterChart.update();
+    });
   }
 
-  document.getElementById('btn-toggle-clusters').addEventListener('click', e => {
-    colorMode = 'cluster';
-    e.target.classList.add('active');
-    document.getElementById('btn-toggle-outcomes').classList.remove('active');
-    document.getElementById('scatter-legend').innerHTML = `
-      <div class="legend-item"><span class="legend-dot" style="background:#dc2626;"></span><span>Group 0: At-Risk / Low Engagement (Fail Rate: 40.4%)</span></div>
-      <div class="legend-item"><span class="legend-dot" style="background:#059669;"></span><span>Group 1: Successful / High Engagement (Fail Rate: 7.1%)</span></div>
-    `;
-    renderScatter();
-  });
-
-  document.getElementById('btn-toggle-outcomes').addEventListener('click', e => {
-    colorMode = 'outcome';
-    e.target.classList.add('active');
-    document.getElementById('btn-toggle-clusters').classList.remove('active');
-    document.getElementById('scatter-legend').innerHTML = `
-      <div class="legend-item"><span class="legend-dot" style="background:#059669;"></span><span>True Pass (59.6%)</span></div>
-      <div class="legend-item"><span class="legend-dot" style="background:#dc2626;"></span><span>True Fail (22.3%)</span></div>
-      <div class="legend-item"><span class="legend-dot" style="background:#64748b;"></span><span>True Withdrawn (18.1%)</span></div>
-    `;
-    renderScatter();
-  });
-
-  resizeCanvas();
+  initPcaScatter();
 
   // 6. TAB 3: DBSCAN Bar Chart
   const ctxDbscan = document.getElementById('dbscan-bar-chart').getContext('2d');
-  new Chart(ctxDbscan, {
+  dbscanChart = new Chart(ctxDbscan, {
     type: 'bar',
     data: {
       labels: ['Core Dense Cohort (88.1%)', 'Noise Outliers Isolated (11.9%)'],
@@ -297,7 +316,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 7. TAB 4: Stacking Benchmark Chart
   const ctxStack = document.getElementById('stacking-chart').getContext('2d');
-  new Chart(ctxStack, {
+  stackingChart = new Chart(ctxStack, {
     type: 'bar',
     data: {
       labels: ['Stacking Ensemble', 'XGBoost', 'Random Forest', 'SVM (RBF)', 'KNN (Dropped)'],

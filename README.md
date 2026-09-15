@@ -1,9 +1,7 @@
 # Student Academic Trajectory & Early Attrition Prediction Platform
-## University of Warwick | Fundamentals of Artificial Intelligence and Data Mining (WM9QG-15)
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![Machine Learning](https://img.shields.io/badge/Stacking%20Ensemble-81.09%25%20Accuracy-emerald.svg)](final_classification_stacking.py)
-[![Institution](https://img.shields.io/badge/Institution-University%20of%20Warwick-purple.svg)](https://warwick.ac.uk/)
 [![Dataset](https://img.shields.io/badge/Dataset-OULAD%20(25%2C793%20Students)-blue.svg)](https://analyse.kmi.open.ac.uk/open-dataset)
 [![License: MIT](https://img.shields.io/badge/License-MIT-slate.svg)](LICENSE)
 
@@ -24,7 +22,7 @@ University retention teams require early indicators to detect students at risk o
 
 ## Team Collaboration & Roles
 
-Developed collaboratively by **Group 2** for the **Fundamentals of Artificial Intelligence and Data Mining (WM9QG-15)** module at the **University of Warwick**.
+Developed collaboratively by the research engineering team for predictive learning analytics and educational data mining on the Open University cohort.
 
 | Team Member | Module Focus | Core Engineering Contributions |
 |:---|:---|:---|

@@ -15,18 +15,17 @@
   <header class="site-header">
     <div class="header-container">
       <div class="brand-section">
-        <div class="brand-badge">WARWICK</div>
         <div class="brand-titles">
           <div class="brand-name">OULAD Learning Analytics Platform</div>
-          <div class="brand-sub">University of Warwick | Student Academic Trajectory & Attrition Prediction Engine</div>
+          <div class="brand-sub">Student Academic Trajectory & Early Attrition Prediction Engine</div>
         </div>
       </div>
       <div class="header-right">
         <div class="dataset-pill">
           <span class="status-dot"></span>
-          <span>25,793 Active Cohort (OULAD)</span>
+          <span>25,793 Active Cohort Records (OULAD)</span>
         </div>
-        </div>
+      </div>
     </div>
   </header>
 
@@ -234,12 +233,8 @@
         <div class="chart-panel">
           <div class="panel-box">
             <h3>2D PCA Behavioral Projection & Cluster Centroids</h3>
-            <div class="canvas-scatter-wrapper">
-              <canvas id="pca-scatter-canvas"></canvas>
-            </div>
-            <div class="scatter-legend" id="scatter-legend">
-              <div class="legend-item"><span class="legend-dot" style="background:#dc2626;"></span><span>Group 0: At-Risk / Low Engagement (Fail Rate: 40.4%)</span></div>
-              <div class="legend-item"><span class="legend-dot" style="background:#059669;"></span><span>Group 1: Successful / High Engagement (Fail Rate: 7.1%)</span></div>
+            <div class="chart-box" style="height: 480px;">
+              <canvas id="pca-scatter-chart"></canvas>
             </div>
           </div>
         </div>
@@ -372,7 +367,7 @@
 
   <footer class="site-footer">
     <div class="footer-container">
-      <div>University of Warwick - Fundamentals of Artificial Intelligence & Data Mining (WM9QG-15)</div>
+      <div>Student Academic Trajectory & Attrition Prediction Platform</div>
       <div><a href="https://github.com/ayqon/Student-Attrition-Stacking-Ensemble" target="_blank" class="footer-link">GitHub Repository</a></div>
     </div>
   </footer>
